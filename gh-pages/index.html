@@ -47,6 +47,7 @@
 	width: 250px;
 	border: solid 1px #bcbbbb;
 	outline: none;
+    color:black;
 
 	-webkit-border-radius: 2em;
 	-moz-border-radius: 2em;
@@ -101,7 +102,7 @@
         var speed = 2;
         var interval = 20;
         var speedVariance = 2;
-
+        var queue = [];
         $(function() {
             $('#gobut').click(function() {
                 var searchVal = $('#search').val();
@@ -132,6 +133,14 @@
                                  item.css('top', item.position().top + parseFloat(item.attr('speed')));
                             }
                         });
+                        var value = queue.pop();
+                        if(value) {
+                            var left = Math.random()*window.innerWidth;
+                            var top = -(Math.random()*varianceTop+value.text.length*35);
+                            var text = value.text.split('').reverse().join('<br/>');
+                            var itemspeed = Math.random()*speedVariance+speed;
+                            $('<div/>').html(text).addClass('matrixText').css({left:left, top: top}).attr('speed',itemspeed).appendTo(document.body);
+                        }
                     }, 1000/30);
                     setInterval(function() {
                         $.ajax({
@@ -140,13 +149,7 @@
                             method: "get",
                             success: function(data) {
                                 if(data.results) {
-                                    $.each(data.results, function(index, value) {
-                                        var left = Math.random()*window.innerWidth;
-                                        var top = -(Math.random()*varianceTop+value.text.length*35);
-                                        var text = value.text.split('').reverse().join('<br/>');
-                                        var itemspeed = Math.random()*speedVariance+speed;
-                                        $('<div/>').html(text).addClass('matrixText').css({left:left, top: top}).attr('speed',itemspeed).appendTo(document.body);
-                                    });
+                                    queue = data.results;
                                 }
                             }
                         });
