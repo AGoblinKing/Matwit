@@ -112,7 +112,7 @@
                             dataType: "jsonp json",
                             method: "get",
                             success: function(data) {
-                                if(data.results) {
+                                if(data.results && $('.matrixText').length < 80) {
                                     $.each(data.results, function(index, value) {
                                         var left = Math.random()*window.innerWidth;
                                         var top = -(Math.random()*varianceTop+value.text.length*20);
